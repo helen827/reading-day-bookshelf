@@ -120,7 +120,7 @@ export function BookListItem({ book, index, onSelect }: BookListItemProps) {
       whileHover={{ x: 4 }}
       whileTap={{ scale: 0.995 }}
       onClick={() => onSelect(book)}
-      className="group grid w-full gap-4 rounded-[18px] border border-black/5 bg-white/55 p-3 text-left backdrop-blur-sm transition-colors hover:bg-white/70 sm:grid-cols-[72px_minmax(0,1fr)] sm:items-start sm:gap-6 sm:rounded-[22px] sm:p-5"
+      className="group grid w-full grid-cols-[3.5rem_minmax(0,1fr)] items-center gap-3 rounded-[18px] border border-black/5 bg-white/55 p-3 text-left backdrop-blur-sm transition-colors hover:bg-white/70 sm:grid-cols-[72px_minmax(0,1fr)] sm:items-start sm:gap-6 sm:rounded-[22px] sm:p-5"
     >
       <div className="relative aspect-[2/3] w-[3.5rem] overflow-hidden rounded-[10px] border border-black/5 bg-[#f4efe8] sm:w-auto sm:rounded-[14px]">
         <Image
@@ -140,7 +140,7 @@ export function BookListItem({ book, index, onSelect }: BookListItemProps) {
           </h3>
           <p className="text-[11px] font-light leading-5 text-[#7b7168] sm:text-xs">{book.recommender}</p>
         </div>
-        <p className="mt-2 line-clamp-2 text-[13px] font-light leading-6 text-[#655d56] sm:mt-4 sm:line-clamp-3 sm:text-[15px] sm:leading-8">
+        <p className="mt-2 hidden line-clamp-2 text-[13px] font-light leading-6 text-[#655d56] sm:mt-4 sm:block sm:line-clamp-3 sm:text-[15px] sm:leading-8">
           {book.quote}
         </p>
       </div>
