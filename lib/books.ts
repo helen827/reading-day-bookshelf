@@ -110,7 +110,7 @@ const books2026: Book[] = [
     author: "杰姆·罗杰斯",
     recommendation:
       "罗杰斯通过环球旅行发现：“理解世界最好的方式是走出去，在真实的土地上看见它”。这是AI无法替代的人类能力。在AI时代，相较于关注技术参数，更要考察团队、应用场景和商业闭环；在AI替代焦虑中，找到自己“被低估的价值点”并深耕。",
-    quote: "",
+    quote: "理解世界最好的方式是走出去，在真实的土地上看见它",
     year: "2026",
     coverUrl: "/covers/2026-book-012.jpg",
     fallbackIndex: 1,
@@ -125,6 +125,7 @@ const books2026: Book[] = [
     quote:
       "我们都不是圣人，但都可以努力变得更好。每次你表现得慷慨大度，你都是在塑造一个下次更有可能慷慨大度的人，这很重要。你改变的不仅是你在这条分支里的行为：你是在给将来产生的所有分支中的自己打预防针。通过成为一个更好的人，你是在确保从此以后一个更好的你出现在越来越多的分支里。",
     year: "2026",
+    coverUrl: "/covers/2026-book-013.jpg",
     fallbackIndex: 2,
   }),
   createManualBook({
@@ -135,6 +136,7 @@ const books2026: Book[] = [
     recommendation: "这本书挺好的，没事可以翻翻，AI时代怎么获得财富与幸福。",
     quote: "生活中所有的回报，无论是财富、人际关系，还是知识，都来自复利。\n如果难以抉择，那答案就是否定的。",
     year: "2026",
+    coverUrl: "/covers/2026-book-014.jpg",
     fallbackIndex: 3,
   }),
 ];
