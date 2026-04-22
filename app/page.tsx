@@ -2,32 +2,28 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { BookListItem, HeroBookStack } from "@/components/book-card";
-import { availableYears, yearlyBookLists, type Book } from "@/lib/books";
+import { availableYears, yearlyBookLists } from "@/lib/books";
 
 function Divider() {
   return <div className="mx-auto my-14 h-px w-20 bg-[#e4ddd5]" />;
 }
 
 export default function Page() {
-  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [isYearMenuOpen, setIsYearMenuOpen] = useState(false);
   const [selectedYear, setSelectedYear] = useState(availableYears[0] ?? "2026");
   const yearMenuRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
   const activeList =
     yearlyBookLists[selectedYear] ??
     yearlyBookLists[availableYears[0] ?? "2026"];
   const activeBooks = activeList?.books ?? [];
   const booksWithQuotes = activeBooks.filter((book) => book.quote.trim().length > 0);
   const heroTheme = activeList.heroTitleLine2.replace(/^[-—–]+\s*/, "");
-  const selectedIndex = selectedBook ? activeBooks.findIndex((book) => book.id === selectedBook.id) : -1;
-  const prevSelectedBook =
-    selectedIndex >= 0 ? activeBooks[(selectedIndex - 1 + activeBooks.length) % activeBooks.length] : null;
-  const nextSelectedBook =
-    selectedIndex >= 0 ? activeBooks[(selectedIndex + 1) % activeBooks.length] : null;
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent) {
@@ -55,15 +51,8 @@ export default function Page() {
     };
   }, []);
 
-  useEffect(() => {
-    if (selectedBook && !activeBooks.some((book) => book.id === selectedBook.id)) {
-      setSelectedBook(null);
-    }
-  }, [activeBooks, selectedBook]);
-
   return (
-    <LayoutGroup>
-      <main className="min-h-screen bg-[#f8f5f1] px-9 py-6 text-[#28211b] sm:px-14 sm:py-8">
+    <main className="min-h-screen bg-[#f8f5f1] px-9 py-6 text-[#28211b] sm:px-14 sm:py-8">
         <header className="flex items-start justify-between">
           <a
             href="https://www.volcanics.com/"
@@ -161,7 +150,7 @@ export default function Page() {
             ))}
           </motion.p>
 
-          <HeroBookStack books={activeBooks} onSelect={setSelectedBook} />
+          <HeroBookStack books={activeBooks} onSelect={(book) => router.push(`/books/${book.id}`)} />
         </section>
 
         <section className="mx-auto max-w-[38rem] pb-10 text-[16px] font-light leading-9 text-[#5f564d]">
@@ -212,124 +201,11 @@ export default function Page() {
                 key={book.id}
                 book={book}
                 index={index}
-                onSelect={setSelectedBook}
+                onSelect={(book) => router.push(`/books/${book.id}`)}
               />
             ))}
           </div>
         </section>
-
-        <AnimatePresence>
-          {selectedBook ? (
-            <motion.div
-              className="fixed inset-0 z-50 overflow-y-auto bg-[rgba(248,245,241,0.82)] p-4 backdrop-blur-md sm:p-6"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedBook(null)}
-            >
-              <motion.article
-                layoutId={`card-${selectedBook.id}`}
-                onClick={(event) => event.stopPropagation()}
-                transition={{ type: "spring", damping: 20, stiffness: 100 }}
-                className="mx-auto my-8 w-full max-w-[58rem] overflow-hidden rounded-[28px] border border-black/5 bg-[#fbf8f4] shadow-[0_20px_80px_rgba(0,0,0,0.08)]"
-              >
-                <div className="grid md:grid-cols-[20rem_minmax(0,1fr)]">
-                  <div className="border-b border-black/5 bg-[#f4ede5] p-6 md:border-b-0 md:border-r md:p-8">
-                    <div className="md:sticky md:top-8">
-                      <motion.div
-                        layoutId={`cover-shell-${selectedBook.id}`}
-                        className="relative aspect-[2/3] overflow-hidden rounded-[18px] border border-black/5"
-                      >
-                        <Image
-                          src={selectedBook.cover_url}
-                          alt={selectedBook.title}
-                          fill
-                          sizes="(max-width: 768px) 80vw, 320px"
-                          unoptimized
-                          className="object-cover"
-                        />
-                      </motion.div>
-
-                      <div className="mt-5 rounded-[18px] border border-black/5 bg-white/55 px-5 py-5">
-                        <p className="font-serif text-[1.45rem] font-light leading-[1.15] tracking-[-0.03em] text-[#211b16]">
-                          {selectedBook.title}
-                        </p>
-                        <p className="mt-3 text-sm font-light leading-7 text-[#6a6159]">
-                          作者：{selectedBook.author || "作者信息待补充"}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="max-h-[min(88vh,980px)] overflow-y-auto p-8 sm:p-10 lg:p-12">
-                    <div className="flex items-start justify-between gap-6">
-                      <div className="min-w-0 flex-1">
-                        <motion.h2
-                          layoutId={`title-${selectedBook.id}`}
-                          className="max-w-[16ch] font-serif text-[2.05rem] font-light leading-[1.02] tracking-[-0.045em] text-[#211b16] sm:text-[2.35rem] lg:text-[2.65rem]"
-                        >
-                          {selectedBook.title}
-                        </motion.h2>
-                        <p className="mt-5 text-sm font-light leading-8 text-[#71675e]">
-                          推荐人：{selectedBook.recommender}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedBook(null)}
-                          className="rounded-2xl bg-white px-6 py-3 text-sm font-light text-[#6a6159] shadow-[0_4px_14px_rgba(0,0,0,0.04)]"
-                        >
-                          Close
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="mt-10 space-y-9">
-                      <section>
-                        <p className="text-[11px] uppercase tracking-[0.28em] text-[#9b8f84]">
-                          Quote
-                        </p>
-                        <blockquote className="mt-4 font-serif text-[1.7rem] font-light leading-[1.45] tracking-[-0.03em] text-[#2a241d]">
-                          {selectedBook.quote}
-                        </blockquote>
-                      </section>
-
-                      <section>
-                        <p className="text-[11px] uppercase tracking-[0.28em] text-[#9b8f84]">
-                          Recommendation
-                        </p>
-                        <p className="mt-4 whitespace-pre-line text-[15px] font-light leading-9 text-[#5f564d]">
-                          {selectedBook.recommendation}
-                        </p>
-                      </section>
-                    </div>
-
-                    {prevSelectedBook && nextSelectedBook ? (
-                      <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-black/5 pt-6">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedBook(prevSelectedBook)}
-                          className="rounded-2xl bg-white px-4 py-2.5 text-sm font-light text-[#6a6159] shadow-[0_4px_14px_rgba(0,0,0,0.04)]"
-                        >
-                          ← 上一本：{prevSelectedBook.title}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedBook(nextSelectedBook)}
-                          className="rounded-2xl bg-white px-4 py-2.5 text-sm font-light text-[#6a6159] shadow-[0_4px_14px_rgba(0,0,0,0.04)]"
-                        >
-                          下一本：{nextSelectedBook.title} →
-                        </button>
-                      </div>
-                    ) : null}
-                  </div>
-                </div>
-              </motion.article>
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
-      </main>
-    </LayoutGroup>
+    </main>
   );
 }
