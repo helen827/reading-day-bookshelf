@@ -685,6 +685,33 @@ export function getBookById(id: string) {
   return getAllBooks().find((item) => item.id === id) ?? null;
 }
 
+export function formatRecommender(raw: string) {
+  const text = raw.trim();
+  if (!text) {
+    return text;
+  }
+
+  const normalizedSlash = text.replace(/\s*\/\s*/g, "/");
+  if (normalizedSlash.includes("/")) {
+    return normalizedSlash;
+  }
+
+  const match = text.match(/^(.+?)\s+([^\s]+)$/);
+  if (!match) {
+    return text;
+  }
+
+  const [, left, right] = match;
+  const companyHint =
+    /(科技|投资|资本|集团|公司|医疗|生物|创始人|CEO|博士|基金|实验室|工作室|Studio|Labs?|AI|火山石|AlphaCen|Fabrie|日食记|奇点|工匠社)/i;
+
+  if (companyHint.test(left)) {
+    return `${left}/${right}`;
+  }
+
+  return text;
+}
+
 const spans = [
   "md:col-span-2 md:row-span-2",
   "md:col-span-1 md:row-span-1",

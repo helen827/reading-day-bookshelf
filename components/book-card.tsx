@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-import type { Book } from "@/lib/books";
+import { formatRecommender, type Book } from "@/lib/books";
 
 type HeroBookStackProps = {
   books: Book[];
@@ -138,7 +138,9 @@ export function BookListItem({ book, index, onSelect }: BookListItemProps) {
           <h3 className="font-serif text-[1.2rem] font-light leading-[1.1] tracking-[-0.02em] text-[#23201c] sm:text-[1.45rem] sm:leading-none sm:tracking-[-0.03em]">
             {book.title}
           </h3>
-          <p className="text-[11px] font-light leading-5 text-[#7b7168] sm:text-xs">{book.recommender}</p>
+          <p className="text-[11px] font-light leading-5 text-[#7b7168] sm:text-xs">
+            {formatRecommender(book.recommender)}
+          </p>
         </div>
         <p className="mt-2 hidden line-clamp-2 text-[13px] font-light leading-6 text-[#655d56] sm:mt-4 sm:block sm:line-clamp-3 sm:text-[15px] sm:leading-8">
           {book.quote}

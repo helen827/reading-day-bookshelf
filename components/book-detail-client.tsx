@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
 
-import type { Book } from "@/lib/books";
+import { formatRecommender, type Book } from "@/lib/books";
 
 type BookDetailClientProps = {
   book: Book;
@@ -99,7 +99,7 @@ export function BookDetailClient({ book, prevBook, nextBook }: BookDetailClientP
                     作者：{book.author || "作者信息待补充"}
                   </p>
                   <p className="mt-1 text-[12px] font-light leading-6 text-[#6a6159] md:mt-2 md:text-sm md:leading-7">
-                    推荐人：{book.recommender}
+                    推荐人：{formatRecommender(book.recommender)}
                   </p>
                 </div>
               </div>
