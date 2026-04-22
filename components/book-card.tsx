@@ -120,14 +120,14 @@ export function BookListItem({ book, index, onSelect }: BookListItemProps) {
       whileHover={{ x: 4 }}
       whileTap={{ scale: 0.995 }}
       onClick={() => onSelect(book)}
-      className="group grid w-full gap-6 rounded-[22px] border border-black/5 bg-white/55 p-[1.125rem] text-left backdrop-blur-sm transition-colors hover:bg-white/70 sm:grid-cols-[72px_minmax(0,1fr)] sm:items-start sm:p-5"
+      className="group grid w-full gap-4 rounded-[18px] border border-black/5 bg-white/55 p-3 text-left backdrop-blur-sm transition-colors hover:bg-white/70 sm:grid-cols-[72px_minmax(0,1fr)] sm:items-start sm:gap-6 sm:rounded-[22px] sm:p-5"
     >
-      <div className="relative aspect-[2/3] overflow-hidden rounded-[14px] border border-black/5 bg-[#f4efe8]">
+      <div className="relative aspect-[2/3] w-[3.5rem] overflow-hidden rounded-[10px] border border-black/5 bg-[#f4efe8] sm:w-auto sm:rounded-[14px]">
         <Image
           src={book.cover_url}
           alt={book.title}
           fill
-          sizes="72px"
+          sizes="(max-width: 640px) 56px, 72px"
           unoptimized
           className="object-cover transition duration-500 group-hover:scale-[1.02]"
         />
@@ -135,12 +135,12 @@ export function BookListItem({ book, index, onSelect }: BookListItemProps) {
 
       <div className="min-w-0">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
-          <h3 className="font-serif text-[1.45rem] font-light leading-none tracking-[-0.03em] text-[#23201c]">
+          <h3 className="font-serif text-[1.2rem] font-light leading-[1.1] tracking-[-0.02em] text-[#23201c] sm:text-[1.45rem] sm:leading-none sm:tracking-[-0.03em]">
             {book.title}
           </h3>
-          <p className="text-xs font-light leading-5 text-[#7b7168]">{book.recommender}</p>
+          <p className="text-[11px] font-light leading-5 text-[#7b7168] sm:text-xs">{book.recommender}</p>
         </div>
-        <p className="mt-4 line-clamp-3 text-[15px] font-light leading-8 text-[#655d56]">
+        <p className="mt-2 line-clamp-2 text-[13px] font-light leading-6 text-[#655d56] sm:mt-4 sm:line-clamp-3 sm:text-[15px] sm:leading-8">
           {book.quote}
         </p>
       </div>

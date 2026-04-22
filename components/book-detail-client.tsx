@@ -53,14 +53,13 @@ export function BookDetailClient({ book, prevBook, nextBook }: BookDetailClientP
     >
       <div className="mx-auto max-w-[58rem]">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <Link
-            href="/"
-            className="inline-flex items-center rounded-2xl bg-white/75 px-5 py-2.5 text-sm font-light text-[#5e574f] shadow-[0_4px_14px_rgba(0,0,0,0.04)] transition hover:bg-white"
-          >
-            ← 返回书单首页
-          </Link>
-
           <div className="flex items-center gap-2">
+            <Link
+              href="/"
+              className="inline-flex items-center rounded-2xl bg-white/75 px-5 py-2.5 text-sm font-light text-[#5e574f] shadow-[0_4px_14px_rgba(0,0,0,0.04)] transition hover:bg-white"
+            >
+              ← 返回书单首页
+            </Link>
             <Link
               href={`/books/${prevBook.id}`}
               className="rounded-2xl bg-white/75 px-4 py-2.5 text-sm font-light text-[#5e574f] shadow-[0_4px_14px_rgba(0,0,0,0.04)] transition hover:bg-white"
@@ -74,6 +73,7 @@ export function BookDetailClient({ book, prevBook, nextBook }: BookDetailClientP
               下一本
             </Link>
           </div>
+
         </div>
 
         <article className="mt-5 overflow-hidden rounded-[28px] border border-black/5 bg-[#fbf8f4] shadow-[0_20px_80px_rgba(0,0,0,0.08)]">
@@ -110,11 +110,7 @@ export function BookDetailClient({ book, prevBook, nextBook }: BookDetailClientP
             </div>
 
             <div className="p-5 sm:p-7 lg:p-10">
-              <h1 className="max-w-[16ch] font-serif text-[1.7rem] font-light leading-[1.08] tracking-[-0.035em] text-[#211b16] sm:text-[1.95rem] md:text-[2.25rem] lg:text-[2.5rem]">
-                {book.title}
-              </h1>
-
-              <div className="mt-7 space-y-8 md:mt-9 md:space-y-9">
+              <div className="space-y-8 md:space-y-9">
                 <section>
                   <p className="text-[11px] uppercase tracking-[0.28em] text-[#9b8f84]">Quote</p>
                   <blockquote className="mt-3 font-serif text-[1.2rem] font-light leading-[1.45] tracking-[-0.02em] text-[#2a241d] sm:text-[1.35rem] md:mt-4 md:text-[1.6rem]">

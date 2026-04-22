@@ -185,7 +185,7 @@ export default function Page() {
 
         <Divider />
 
-        <section className="mx-auto max-w-[56rem] pb-32">
+        <section className="mx-auto max-w-[56rem] pb-20 sm:pb-32">
           <div className="mx-auto max-w-[38rem]">
             <h2 className="text-[15px] font-light tracking-[-0.01em] text-[#2e2823]">
               Annual Selection
@@ -195,7 +195,7 @@ export default function Page() {
             </p>
           </div>
 
-          <div className="mx-auto mt-14 grid max-w-[38rem] gap-7">
+          <div className="mx-auto mt-10 grid max-w-[38rem] gap-4 sm:mt-14 sm:gap-7">
             {activeBooks.map((book, index) => (
               <BookListItem
                 key={book.id}
