@@ -5,13 +5,14 @@ import { notFound } from "next/navigation";
 import { getBookById, getBooksByYear } from "@/lib/books";
 
 type BookPageProps = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
-export default function BookPage({ params }: BookPageProps) {
-  const book = getBookById(params.id);
+export default async function BookPage({ params }: BookPageProps) {
+  const { id } = await params;
+  const book = getBookById(id);
   if (!book) {
     notFound();
   }

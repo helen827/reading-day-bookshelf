@@ -2,7 +2,12 @@ import source from "@/books.enriched.json";
 
 type SourceBook = (typeof source.books)[number];
 
-export type Book = SourceBook & {
+export type Book = Omit<SourceBook, "isbn" | "isbn10" | "isbn13"> & {
+  isbn: string | null;
+  isbn10: string | null;
+  isbn13: string | null;
+  coverUrl?: string;
+  coverThumbUrl?: string;
   year: string;
 };
 
