@@ -127,7 +127,7 @@ export function HeroBookStack({ books, onSelect }: HeroBookStackProps) {
 
   return (
     <div
-      className={`relative mx-auto mt-8 h-[16rem] w-full max-w-[72rem] overflow-visible select-none sm:mt-10 sm:h-[20rem] ${
+      className={`relative mx-auto mt-8 h-[16rem] w-full max-w-[72rem] overflow-hidden select-none touch-pan-y sm:mt-10 sm:h-[20rem] sm:overflow-visible ${
         isDragging ? "cursor-grabbing" : canSlide ? "cursor-grab" : ""
       }`}
       onPointerDown={(event) => {
