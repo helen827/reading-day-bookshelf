@@ -6,6 +6,7 @@ export type Book = Omit<SourceBook, "isbn" | "isbn10" | "isbn13"> & {
   isbn: string | null;
   isbn10: string | null;
   isbn13: string | null;
+  doubanRating?: number | null;
   coverUrl?: string;
   coverThumbUrl?: string;
   year: string;
@@ -55,6 +56,43 @@ function normalizeQuoteText(text: string) {
   return text.replace(/[“”"]/g, "").trim();
 }
 
+const doubanRatingsByBookId: Record<string, number> = {
+  "book-001": 7.2,
+  "book-002": 8.2,
+  "book-003": 8.1,
+  "book-004": 7.1,
+  "book-005": 9.3,
+  "book-006": 8.4,
+  "book-007": 7.7,
+  "book-008": 6.6,
+  "book-009": 8.9,
+  "book-010": 8.1,
+  "2023-book-002": 8.3,
+  "2023-book-003": 8.7,
+  "2023-book-004": 7.7,
+  "2023-book-005": 6.3,
+};
+
+function sortBooksByDoubanRating(items: Book[]) {
+  return items
+    .map((book, index) => ({ book, index }))
+    .sort((left, right) => {
+      const leftRating = left.book.doubanRating;
+      const rightRating = right.book.doubanRating;
+      const leftHasRating = typeof leftRating === "number";
+      const rightHasRating = typeof rightRating === "number";
+
+      if (leftHasRating && rightHasRating && leftRating !== rightRating) {
+        return rightRating - leftRating;
+      }
+      if (leftHasRating !== rightHasRating) {
+        return leftHasRating ? -1 : 1;
+      }
+      return left.index - right.index;
+    })
+    .map((entry) => entry.book);
+}
+
 function createManualBook(input: {
   id: string;
   title: string;
@@ -77,6 +115,7 @@ function createManualBook(input: {
     isbn: null,
     isbn10: null,
     isbn13: null,
+    doubanRating: doubanRatingsByBookId[input.id] ?? null,
     cover_url: input.coverUrl ?? getFallbackCover(input.fallbackIndex),
     cover_thumbnail_url: input.coverThumbUrl ?? input.coverUrl ?? getFallbackThumb(input.fallbackIndex),
     enrichment: { source: "manual", matched_title: input.title, confidence: 1 },
@@ -84,10 +123,11 @@ function createManualBook(input: {
   };
 }
 
-const books2026: Book[] = [
+const books2026: Book[] = sortBooksByDoubanRating([
   ...source.books.map((book) => ({
     ...book,
     quote: normalizeQuoteText(book.quote),
+    doubanRating: doubanRatingsByBookId[book.id] ?? null,
     year: "2026",
   })),
   createManualBook({
@@ -139,9 +179,21 @@ const books2026: Book[] = [
     coverUrl: "/covers/2026-book-014.jpg",
     fallbackIndex: 3,
   }),
-];
+  createManualBook({
+    id: "2026-book-015",
+    title: "当下的力量",
+    recommender: "汉图科技创始人/崔郁轩",
+    author: "埃克哈特·托利",
+    recommendation:
+      "作者用自身从剑桥学霸到深陷抑郁、最终在当下觉醒的经历告诉我们：人类的痛苦，本质上是思维被过去的遗憾和未来的焦虑裹挟，而忽略了唯一真实的“当下”。\n\n在今天这个充满不确定性的时代——中国经济处于转型升级的关键期，创业浪潮起起落落，世界格局复杂多变，科技发展日新月异，这本书不仅能帮我们挣脱内耗的枷锁，更能让我们在混沌中找到清晰的认知和行动方向。一、它让我读懂了我们的真实处境：在“追逐”中迷失，在“焦虑”中内耗，我们这个时代的共同困境：我们身处一个“永远在路上”的社会，却从未真正“在场”。\n\n我们被“内卷”和“攀比”裹挟。创业圈里，大家都在盲目追逐风口，生怕错过下一个“独角兽”机会，却忽略了项目本身的核心价值。而地缘政治冲突、全球经济复苏乏力、产业链重构，我们每天被各种负面信息包围，要么担忧未来的发展前景，要么抱怨当下的困境，却很少静下心来，专注于当下能做的事情。作者告诉我们，当下是唯一能被我们掌控的时刻，过去无法改变，未来无法预测，唯有接纳当下的不完美，才能摆脱内耗，找到前行的力量。\n\n很多人读完《当下的力量》，会误以为这本书是“躺平”的借口，认为“活在当下”就是放弃对未来的追求。但事实上，这本书教会我的，是一种更清醒、更务实的未来观：未来不是凭空而来的，而是由每一个“当下”堆砌而成的；唯有扎根当下，做好当下的每一件事，才能拥有可预期的未来。我们当下的每一次努力、每一次积累，都是在为未来铺路。\n\n在科技飞速发展的今天，很多人担心自己被时代淘汰，于是盲目跟风学习各种技能，却忽略了当下的深耕——比如有人今天学AI，明天学直播，后天学跨境电商，最终什么都学不精，反而陷入了更深的焦虑。《当下的力量》让我明白，与其焦虑未来的不确定性，不如专注于当下的专业领域，深耕细作，打造自己的核心竞争力。\n\n读《当下的力量》，不是为了寻求心灵的慰藉，而是为了在喧嚣的时代中，找到一份清醒和坚定，这份清醒和坚定，正是我们当下最需要的。首先，当下的我们，比任何时候都需要“摆脱内耗”。其次，当下的中国，比任何时候都需要“扎根当下”。最后，当下的世界，比任何时候都需要“回归本质”。",
+    quote: "万物本无问题。问题是思维的创造物。\n在你停止需要对抗的那一刻，你就自由了。\n生命是你当下所处的这个时刻。你曾经有过的生命——过去——只是一个记忆痕迹。你将要拥有的生命——未来——是一种想象。",
+    year: "2026",
+    coverUrl: "/covers/2026-book-015.jpg",
+    fallbackIndex: 4,
+  }),
+]);
 
-const books2025: Book[] = [
+const books2025: Book[] = sortBooksByDoubanRating([
   {
     id: "2025-book-001",
     title: "禅与摩托车维修艺术",
@@ -325,9 +377,9 @@ const books2025: Book[] = [
     year: "2025",
     coverUrl: "/covers/2025-book-011.jpg",
   },
-];
+]);
 
-const books2023: Book[] = [
+const books2023: Book[] = sortBooksByDoubanRating([
   createManualBook({
     id: "2023-book-001",
     title: "清醒思考的艺术",
@@ -457,9 +509,9 @@ const books2023: Book[] = [
     fallbackIndex: 0,
     coverUrl: "/covers/2023-book-011.jpg",
   }),
-];
+]);
 
-const books2022: Book[] = [
+const books2022: Book[] = sortBooksByDoubanRating([
   createManualBook({
     id: "2022-book-001",
     title: "八山",
@@ -625,7 +677,7 @@ const books2022: Book[] = [
     coverUrl: "/covers/2022-book-014.jpg",
     fallbackIndex: 3,
   }),
-];
+]);
 
 export const yearlyBookLists: Record<string, YearBookList> = {
   "2026": {

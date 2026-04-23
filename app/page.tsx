@@ -51,6 +51,21 @@ export default function Page() {
     };
   }, []);
 
+  useEffect(() => {
+    const syncYearFromUrl = () => {
+      const params = new URLSearchParams(window.location.search);
+      const yearFromQuery = params.get("year");
+      if (!yearFromQuery || !availableYears.includes(yearFromQuery)) {
+        return;
+      }
+      setSelectedYear((current) => (current === yearFromQuery ? current : yearFromQuery));
+    };
+
+    syncYearFromUrl();
+    window.addEventListener("popstate", syncYearFromUrl);
+    return () => window.removeEventListener("popstate", syncYearFromUrl);
+  }, []);
+
   return (
     <main className="min-h-screen bg-[#f8f5f1] px-9 py-6 text-[#28211b] sm:px-14 sm:py-8">
         <header className="flex items-start justify-between">
@@ -109,6 +124,7 @@ export default function Page() {
                       onClick={() => {
                         setSelectedYear(year);
                         setIsYearMenuOpen(false);
+                        router.replace(`/?year=${year}`, { scroll: false });
                       }}
                       className={[
                         "block w-full rounded-[14px] px-4 py-3 text-left text-[15px] font-light transition-colors",
@@ -150,7 +166,10 @@ export default function Page() {
             ))}
           </motion.p>
 
-          <HeroBookStack books={activeBooks} onSelect={(book) => router.push(`/books/${book.id}`)} />
+          <HeroBookStack
+            books={activeBooks}
+            onSelect={(book) => router.push(`/books/${book.id}?year=${selectedYear}`)}
+          />
         </section>
 
         <section className="mx-auto max-w-[38rem] pb-10 text-[16px] font-light leading-9 text-[#5f564d]">
@@ -174,7 +193,7 @@ export default function Page() {
             {booksWithQuotes.map((book) => (
               <Link
                 key={book.id}
-                href={`/books/${book.id}`}
+                href={`/books/${book.id}?year=${selectedYear}`}
                 className="block rounded-[20px] border border-black/5 bg-white/55 px-7 py-6 font-serif text-[16px] font-light leading-9 tracking-[-0.01em] text-[#2b231d] transition hover:-translate-y-1 hover:bg-white/70"
               >
                 {book.quote}
@@ -201,7 +220,7 @@ export default function Page() {
                 key={book.id}
                 book={book}
                 index={index}
-                onSelect={(book) => router.push(`/books/${book.id}`)}
+                onSelect={(book) => router.push(`/books/${book.id}?year=${selectedYear}`)}
               />
             ))}
           </div>

@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useRef } from "react";
 
-import { formatRecommender, type Book } from "@/lib/books";
+import { availableYears, formatRecommender, type Book } from "@/lib/books";
 
 type BookDetailClientProps = {
   book: Book;
@@ -17,7 +17,12 @@ const SWIPE_THRESHOLD = 48;
 
 export function BookDetailClient({ book, prevBook, nextBook }: BookDetailClientProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const touchStartX = useRef<number | null>(null);
+  const yearFromQuery = searchParams.get("year");
+  const activeYear =
+    yearFromQuery && availableYears.includes(yearFromQuery) ? yearFromQuery : book.year;
+  const yearSuffix = `?year=${activeYear}`;
 
   const handleTouchStart = (event: React.TouchEvent<HTMLElement>) => {
     touchStartX.current = event.changedTouches[0]?.clientX ?? null;
@@ -38,11 +43,11 @@ export function BookDetailClient({ book, prevBook, nextBook }: BookDetailClientP
     }
 
     if (deltaX < 0) {
-      router.push(`/books/${nextBook.id}`);
+      router.push(`/books/${nextBook.id}${yearSuffix}`);
       return;
     }
 
-    router.push(`/books/${prevBook.id}`);
+    router.push(`/books/${prevBook.id}${yearSuffix}`);
   };
 
   return (
@@ -55,19 +60,19 @@ export function BookDetailClient({ book, prevBook, nextBook }: BookDetailClientP
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <Link
-              href="/"
+              href={`/${yearSuffix}`}
               className="inline-flex items-center rounded-2xl bg-white/75 px-5 py-2.5 text-sm font-light text-[#5e574f] shadow-[0_4px_14px_rgba(0,0,0,0.04)] transition hover:bg-white"
             >
               ← 返回书单首页
             </Link>
             <Link
-              href={`/books/${prevBook.id}`}
+              href={`/books/${prevBook.id}${yearSuffix}`}
               className="rounded-2xl bg-white/75 px-4 py-2.5 text-sm font-light text-[#5e574f] shadow-[0_4px_14px_rgba(0,0,0,0.04)] transition hover:bg-white"
             >
               上一本
             </Link>
             <Link
-              href={`/books/${nextBook.id}`}
+              href={`/books/${nextBook.id}${yearSuffix}`}
               className="rounded-2xl bg-white/75 px-4 py-2.5 text-sm font-light text-[#5e574f] shadow-[0_4px_14px_rgba(0,0,0,0.04)] transition hover:bg-white"
             >
               下一本
@@ -128,13 +133,13 @@ export function BookDetailClient({ book, prevBook, nextBook }: BookDetailClientP
 
               <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-black/5 pt-6">
                 <Link
-                  href={`/books/${prevBook.id}`}
+                  href={`/books/${prevBook.id}${yearSuffix}`}
                   className="inline-flex items-center rounded-2xl bg-white/75 px-4 py-2.5 text-sm font-light text-[#5e574f] shadow-[0_4px_14px_rgba(0,0,0,0.04)] transition hover:bg-white"
                 >
                   ← 上一本：{prevBook.title}
                 </Link>
                 <Link
-                  href={`/books/${nextBook.id}`}
+                  href={`/books/${nextBook.id}${yearSuffix}`}
                   className="inline-flex items-center rounded-2xl bg-white/75 px-4 py-2.5 text-sm font-light text-[#5e574f] shadow-[0_4px_14px_rgba(0,0,0,0.04)] transition hover:bg-white"
                 >
                   下一本：{nextBook.title} →
